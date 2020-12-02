@@ -1,0 +1,79 @@
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+            <a (click)="sortBy('name', 'desc')">Name&nbsp;</a>
+            <span *ngIf="sortOption.sortBy=='name'">
+              <a (click)="sortBy('name', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('name', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th>
+            <a (click)="sortBy('price', 'desc')">Price&nbsp;</a>
+            <span *ngIf="sortOption.sortBy=='price'">
+              <a (click)="sortBy('price', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('price', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th>
+            <a (click)="sortBy('numDays', 'desc')">Duration&nbsp;</a>
+            <span *ngIf="sortOption.sortBy=='numDays'">
+              <a (click)="sortBy('numDays', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('numDays', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <!-- <th>
+            <a (click)="sortBy('ordering', 'desc')">Orders&nbsp;</a>
+            <span *ngIf="sortOption.sortBy=='ordering'">
+              <a (click)="sortBy('ordering', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('ordering', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th> -->
+          <th>
+            <a (click)="sortBy('createdAt', 'desc')">Created At&nbsp;</a>
+            <span *ngIf="sortOption.sortBy=='createdAt'">
+              <a (click)="sortBy('createdAt', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('createdAt', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th>Action</th>
+        </tr>
+        <tr>
+          <th>
+            <div class="input-group">
+              <input class="form-control" [(ngModel)]="searchText" placeholder="search..." (keypress)="keyPress($event)" />
+            </div>
+          </th>
+          <th colspan="3"></th>
+          <th><a class="btn btn-success" (click)="query()">Filter</a></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of packages, let i = index">
+          <td>
+            <a [routerLink]="['/packages/update', item._id ]">
+              {{item?.name}}
+            </a>
+          </td>
+          <td><span class="badge badge-danger">{{item?.price | currency}}</span></td>
+          <td><span class="badge badge-warning">{{item.numDays}} Days</span></td>
+          <!-- <td><span class="badge badge-danger">{{item.ordering}}</span></td> -->
+          <td>
+            <span>{{item.createdAt | date:'short'}}</span>
+          </td>
+          <td>
+            <a [routerLink]="['/packages/update', item._id ]"><i class="fa fa-pencil"></i></a>&nbsp;
+            <a (click)="remove(item?._id, i)"><i class="fa fa-trash"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="display-inline" [hidden]="total < take">
+      <div class="pull-right">
+        <ngb-pagination [collectionSize]="total" [(page)]="page" [maxSize]="5" [pageSize]="take" (pageChange)="query()"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>

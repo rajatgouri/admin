@@ -1,0 +1,59 @@
+<div class="card">
+  <div class="card-body">
+    <form (submit)="submit(frm)" #frm>
+      <div class="row">
+        <div class="col col-md-6">
+          <div class="form-group">
+            <label>Name (*)</label>
+            <input type="text" name="categoryName" class="form-control" placeholder="Enter name" [(ngModel)]="category.name" required />
+          </div>
+        </div>
+        <div class="col col-md-6">
+          <div class="form-group">
+            <label>Alias</label>
+            <input type="text" name="alias" class="form-control" placeholder="no space, special chars, alias name for seo" [(ngModel)]="category.alias" />
+          </div>
+        </div>
+        <div class="col col-md-6">
+          <div class="form-group">
+            <label>Description</label>
+            <textarea class="form-control" name="categorydesc" placeholder="Enter some text" [(ngModel)]="category.description"></textarea>
+          </div>
+        </div>
+        <div class="col col-md-6">
+          <div class="form-group">
+            <label>Parent</label>
+            <select class="form-control" [(ngModel)]="category.parentId" name="parent">
+              <option value="">-- No parent --</option>
+              <option *ngFor="let item of tree" [ngValue]="item._id">{{item.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col col-md-6">
+          <div class="form-group">
+            <label>Image <media-select (onSelect)="selectImage($event)"></media-select></label>
+            <hr />
+            <img *ngIf="imageUrl" width="150" [src]="imageUrl" />
+          </div>
+        </div>
+        <div class="col col-md-6" *ngIf="category.metaSeo">
+          <div class="form-group">
+            <label>Meta keywords</label>
+            <input type="text" class="form-control" name="metakw" [(ngModel)]="category.metaSeo.keywords" placeholder="Enter keywords for meta SEO" />
+          </div>
+        </div>
+        <div class="col col-md-6" *ngIf="category.metaSeo">
+          <div class="form-group">
+            <label>Meta description</label>
+            <textarea class="form-control" name="metadesc" [(ngModel)]="category.metaSeo.description" placeholder="Enter description for meta SEO"></textarea>
+          </div>
+        </div>
+        <div class="col col-md-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

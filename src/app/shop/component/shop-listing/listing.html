@@ -1,0 +1,186 @@
+<div class="card">
+  <div class="card-block table-responsive">
+    <table class="table table-custom">
+      <thead>
+        <tr>
+          <th>
+            <a (click)="sortBy('name', 'desc')">Name</a>
+            <span *ngIf="sortOption.sortBy=='name'">
+              <a (click)="sortBy('name', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('name', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th>
+            <a (click)="sortBy('owner.name', 'desc')">Owner</a>
+            <span *ngIf="sortOption.sortBy=='owner.name'">
+              <a (click)="sortBy('owner.name', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('owner.name', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th>
+            <a (click)="sortBy('email', 'desc')">Email</a>
+            <span *ngIf="sortOption.sortBy=='email'">
+              <a (click)="sortBy('email', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('email', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th>
+            <a (click)="sortBy('address', 'desc')">Address</a>
+            <span *ngIf="sortOption.sortBy=='address'">
+              <a (click)="sortBy('address', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('address', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th class="min-w-158">
+            <a>Document issue</a>
+          </th>
+          <th>
+            <a (click)="sortBy('featured', 'desc')">Featured</a>
+            <span *ngIf="sortOption.sortBy=='featured'">
+              <a (click)="sortBy('featured', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('featured', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th>
+            <a (click)="sortBy('verified', 'desc')">Verified</a>
+            <span *ngIf="sortOption.sortBy=='verified'">
+              <a (click)="sortBy('verified', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('verified', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th>
+            <a (click)="sortBy('activated', 'desc')">Active</a>
+            <span *ngIf="sortOption.sortBy=='activated'">
+              <a (click)="sortBy('activated', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('activated', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th class="min-w-120">
+            <a (click)="sortBy('featuredTo', 'desc')">Featured to</a>
+            <span *ngIf="sortOption.sortBy=='featuredTo'">
+              <a (click)="sortBy('featuredTo', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('featuredTo', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th class="min-w-120">
+            <a (click)="sortBy('createdAt', 'desc')">Created at</a>
+            <span *ngIf="sortOption.sortBy=='createdAt'">
+              <a (click)="sortBy('createdAt', 'asc')" *ngIf="sortOption.sortType=='desc'"><i class="fa fa-caret-down"></i></a>
+              <a (click)="sortBy('createdAt', 'desc')" *ngIf="sortOption.sortType=='asc'"><i class="fa fa-caret-up"></i></a>
+            </span>
+          </th>
+          <th>
+            Actions
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <div class="input-group">
+              <input class="form-control" [(ngModel)]="searchFields.name" placeholder="search name" (keypress)="keyPress($event)" />
+            </div>
+          </th>
+          <th>
+            <div class="input-group">
+              <input type="text" name="owner" class="form-control" [class.is-invalid]="searchFailed" [(ngModel)]="owner"
+                [ngbTypeahead]="search" placeholder="search owner" [resultTemplate]="rt" [inputFormatter]="formatter"
+                (keypress)="keyPress($event)" (selectItem)="selectOwner($event)" />
+              <span *ngIf="searching">searching...</span>
+              <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
+              <ng-template #rt let-r="result" let-t="term">
+                <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+              </ng-template>
+            </div>
+          </th>
+          <th>
+            <div class="input-group">
+              <input class="form-control" [(ngModel)]="searchFields.email" placeholder="search email" (keypress)="keyPress($event)" />
+            </div>
+          </th>
+          <th></th>
+          <th></th>
+          <th>
+            <select class="form-control" [(ngModel)]="searchFields.featured">
+              <option value="">All</option>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </th>
+          <th>
+            <select class="form-control" [(ngModel)]="searchFields.verified">
+              <option value="">All</option>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </th>
+          <th>
+            <select class="form-control" [(ngModel)]="searchFields.activated">
+              <option value="">All</option>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </th>
+          <th></th>
+          <th></th>
+          <th>
+            <a class="btn btn-success" (click)="query()">Filter</a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="!total && !isLoading">
+          <td colspan="11">
+            <p class="text-center text-danger">There is no items yet..</p>
+          </td>
+        </tr>
+        <tr *ngFor="let item of items, let i = index">
+          <td>
+            <a [routerLink]="['/shops/update/', item._id ]">
+              {{item.name}}
+            </a>
+          </td>
+          <td>{{item?.owner?.name}}</td>
+          <td>{{item.email}}</td>
+          <td>{{item.address}}&nbsp;{{item?.city}}&nbsp;{{item?.state}}&nbsp;{{item?.country}}</td>
+          <td>
+            <p class="text-center">
+              <a href="{{item?.verificationIssue?.fileUrl}}" download target="_blank" *ngIf="item?.verificationIssue?.fileUrl">
+                <i class="fa fa-file"></i>
+              </a>
+            </p>
+          </td>
+          <td class="text-center">
+            <span class="badge badge-warning" *ngIf="!item.featured">N</span>
+            <span class="badge badge-success" *ngIf="item.featured">Y</span>
+          </td>
+          <td class="text-center">
+            <span class="badge badge-warning" *ngIf="!item.verified">N</span>
+            <span class="badge badge-success" *ngIf="item.verified">Y</span>
+          </td>
+          <td class="text-center">
+            <span class="badge badge-warning" *ngIf="!item.activated">N</span>
+            <span class="badge badge-success" *ngIf="item.activated">Y</span>
+          </td>
+          <td>
+            <span *ngIf="!item.featuredTo" class="text-muted">N/A</span>
+            <span>{{item.featuredTo | date}}</span>
+          </td>
+          <td>
+            <span>{{item.createdAt | date}}</span>
+          </td>
+          <td>
+            <a [routerLink]="['/shops/update', item._id]">
+              <i class="fa fa-pencil"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="8" *ngIf="total > 10">
+            <ngb-pagination [collectionSize]="total" [(page)]="page" [maxSize]="5" (pageChange)="query()"></ngb-pagination>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

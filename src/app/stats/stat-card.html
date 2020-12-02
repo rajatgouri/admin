@@ -1,0 +1,87 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex no-block">
+      <div class="m-r-20 align-self-center">
+        <span class="lstick m-r-20"></span>
+        <img *ngIf="type === 'order'" src="assets/images/icon/income.png">
+        <img *ngIf="type === 'user' || type ==='shop'" src="assets/images/icon/staff.png">
+        <img *ngIf="type === 'product'" src="assets/images/icon/expense.png">
+      </div>
+      <div class="align-self-center inline-block">
+        <h5 class="text-highlight m-t-10">
+          <span *ngIf="type === 'order'"><a [routerLink]="['/orders/list']">Orders</a></span>
+          <span *ngIf="type === 'product'"><a [routerLink]="['/products']">Products</a></span>
+          <span *ngIf="type === 'user'"><a [routerLink]="['/users/list']">Users</a></span>
+          <span *ngIf="type === 'shop'"><a [routerLink]="['/shops']">Shops</a></span> Statistic</h5>
+        <div *ngIf="type === 'shop'">
+          <p class="inline-block">
+            <span class="label label-danger">{{stat?.all}}</span>&nbsp;<strong>Total</strong>
+          </p>
+          <p class="inline-block">
+            <span class="label label-success">{{stat?.featured}}</span> Featured
+          </p>
+          <p class="inline-block">
+            <span class="label label-success">{{stat?.activated}}</span> Actived
+          </p>
+          <p class="inline-block">
+            <span class="label label-warning">{{stat?.deactivated}}</span> InActived
+          </p>
+          <p class="inline-block">
+            <span class="label label-success">{{stat?.verified}}</span> Verified
+          </p>
+          <p class="inline-block">
+            <span class="label label-warning">{{stat?.unverified}}</span> Unverified
+          </p>
+        </div>
+
+        <div *ngIf="type === 'user'">
+          <p class="inline-block">
+            <span class="label label-danger">{{stat?.all}}</span>&nbsp;<strong>Total</strong>
+          </p>
+          <p class="inline-block">
+            <span class="label label-success">{{stat?.activated}}</span> Actived
+          </p>
+          <p class="inline-block">
+            <span class="label label-warning">{{stat?.deactivated}}</span> InActived
+          </p>
+        </div>
+
+        <div *ngIf="type === 'product'">
+          <p class="inline-block">
+            <span class="label label-danger">{{stat?.total}}</span>&nbsp;<strong>Total</strong>
+          </p>
+          <p class="inline-block">
+            <span class="label label-danger">{{stat?.totalTransaction}}</span>&nbsp;<strong>Total Transaction Type</strong>
+          </p>
+        </div>
+
+        <div *ngIf="type === 'order'">
+          <p class="inline-block">
+            <span class="label label-danger">{{stat?.totalParentOrder}}</span>&nbsp;<strong>Total Order</strong>
+          </p>
+          <p class="inline-block">
+            <span class="label label-danger">{{stat?.all}}</span>&nbsp;<strong>Total Sub Order</strong>
+          </p>
+          <p class="inline-block">
+            <span class="label label-success">{{stat?.completed}}</span> Completed
+          </p>
+          <p class="inline-block">
+            <span class="label label-success">{{stat?.shipping}}</span> Shipping
+          </p>
+          <p class="inline-block">
+            <span class="label label-info">{{stat?.progressing}}</span> Progressing
+          </p>
+          <p class="inline-block">
+            <span class="label label-info">{{stat?.pending}}</span> Pending
+          </p>
+          <p class="inline-block">
+            <span class="label label-warning">{{stat?.refunded}}</span> Refunded
+          </p>
+          <p class="inline-block">
+            <span class="label label-warning">{{stat?.cancelled}}</span> Cancelled
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,257 @@
+<div class="padding-main">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-heading resume-heading">
+            <div class="row">
+              <div class="col-lg-12">
+                <h3 translate>General information</h3>
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Number
+                      </div>
+                      <div class="col-md-10">
+                        <strong>{{order.trackingCode}}</strong>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        IP
+                      </div>
+                      <div class="col-md-10">
+                        {{order.userIP}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Created at
+                      </div>
+                      <div class="col-md-10">
+                        {{order.createdAt | date:'short'}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Shipping address
+                      </div>
+                      <div class="col-md-10">
+                        {{order.shippingAddress}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Payment method
+                      </div>
+                      <div class="col-md-10">
+                        <span class="label label-success" *ngIf="order.paymentMethod === 'cod'">COD</span>
+                        <span class="label label-warning" *ngIf="order.paymentMethod === 'stripe'">Stripe</span>
+                        <span class="label label-warning" *ngIf="order.paymentMethod === 'mygateglobal'">My Gate</span>
+                        <span class="label label-primary" *ngIf="order.paymentMethod === 'paypal'">Paypal</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Payment status
+                      </div>
+                      <div class="col-md-10">
+                        <span class="badge badge-success">
+                          {{order.paymentStatus}}
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Total price
+                      </div>
+                      <div class="col-md-10 price-product">
+                        {{order.totalPrice | currency}}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <br>
+                <h3 translate>Shipping details</h3>
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Name
+                      </div>
+                      <div class="col-md-10">
+                        {{order.firstName}} {{order.lastName}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Email
+                      </div>
+                      <div class="col-md-4">
+                        {{order.email || order?.customer?.email}}
+                      </div>
+                      <div class="col-md-2" translate>
+                        Phone number
+                      </div>
+                      <div class="col-md-4">
+                        {{order.phoneNumber}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Street address
+                      </div>
+                      <div class="col-md-4">
+                        {{order.streetAddress}}
+                      </div>
+                      <div class="col-md-2" translate>
+                        City
+                      </div>
+                      <div class="col-md-4">
+                        {{order.city}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        State
+                      </div>
+                      <div class="col-md-4">
+                        {{order.state}}
+                      </div>
+                      <div class="col-md-2" translate>
+                        Country
+                      </div>
+                      <div class="col-md-4">
+                        {{order.country}}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <br>
+                <h3 translate>Products</h3>
+                <table class="table table-hover bg-white">
+                  <thead>
+                    <tr>
+                      <th translate>
+                        Product
+                      </th>
+                      <th translate>
+                        Transaction Type
+                      </th>
+                      <th translate>
+                        Quantity
+                      </th>
+                      <th translate>
+                        Status
+                      </th>
+                      <th>
+                        <span translate>Tax</span> / <span translate>Shipping price</span> / <span translate>Deposite price</span>
+                      </th>
+                      <th>
+                        <span translate>Price</span>
+                      </th>
+                      <th>
+                        <span translate>Commission</span>
+                      </th>
+                      <th>
+                        <span translate>Commission Price</span>
+                      </th>
+                      <th>
+                        <span translate>Balance</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of details, let i = index">
+                      <td>
+                        <p>
+                          <a [routerLink]="['/products', item.productDetails.alias]">{{item?.productDetails?.name}}</a>
+                          <br />
+                          <span *ngIf="item.startDate && item.endDate"><b>{{item?.startDate | date:'M/d/yyyy'}} - {{item?.endDate | date:'M/d/yyyy'}}</b></span>
+                          <br />
+                          <span class="label label-primary">{{item.productDetails?.type}}</span>
+                          
+                        </p>
+
+                        <p *ngIf="item.variantDetails">
+                          <span *ngFor="let option of item.variantDetails.options">
+                            {{option.displayText || option.optionKey}}: {{option.value}}
+                          </span>
+                        </p>
+                      </td>
+                      <td>
+                        <span *ngIf="item?.transactionTypeDetails?.name != ''">{{item?.transactionTypeDetails?.name}}</span>
+                        <span *ngIf="!item?.transactionTypeDetails">Buy</span>
+                      </td>
+                      <td>{{item?.quantity}}</td>
+                      <td>
+                        <select name="status" [(ngModel)]="item.status">
+                          <option value="completed">Completed</option>
+                          <option value="shipping">Shipping</option>
+                          <option value="pending">Pending</option>
+                          <option value="progressing">Progressing</option>
+                          <option value="refunded">Refunded</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
+                      </td>
+                      <td>
+                        <p>
+                          <span>
+                            <span translate>Tax</span> {{item.taxPrice | currency}}
+                          </span>
+                          <br />
+                          <span>
+                            <span translate>Shipping</span> {{item.shippingPrice | currency}}
+                          </span>
+                          <span *ngIf="item.depositAmount > 0">
+                            <span translate>Deposite</span> {{item?.depositAmount | currency}}
+                          </span>
+                        </p>
+                      </td>
+                      <td>
+                        {{item.productPrice | currency}}
+                      </td>
+                      <td>
+                        {{item.commissionRate *100}}%
+                      </td>
+                      <td>
+                        {{item.commission | currency}}
+                      </td>
+                      <td>
+                        {{item.balance | currency}}
+                      </td>
+                      <td>
+                        <button class="btn btn-success" (click)="updateStatus(item, i)">Update Status</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br>
+                <button class="btn btn-warning" [routerLink]="['/orders/list']" translate>Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

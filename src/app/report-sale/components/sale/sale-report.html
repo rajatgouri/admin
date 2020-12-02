@@ -1,0 +1,46 @@
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Shop</th>
+          <th>Total order</th>
+          <th>Total Product</th>
+          <th>Total Price</th>
+          <th>Commission</th>
+          <th>Earning</th>
+          <th>Tax</th>
+        </tr>
+        <th>
+          <div class="input-group">
+            <input class="form-control" [(ngModel)]="searchFields.name" placeholder="search..." (keypress)="keyPress($event)" />
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary fa fa-search" (click)="query()" type="button"></button>
+            </div>
+          </div>
+        </th>
+        <th colspan="6"></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let shop of shops">
+          <td>
+            <a [routerLink]="['/shops/update', shop?._id]">{{shop?.name}}</a>
+          </td>
+          <td>{{shop?.saleStats?.totalOrder | number}}</td>
+          <td>{{shop?.saleStats?.totalProduct | number}}</td>
+          <td>{{shop?.saleStats?.totalPrice | currency}}</td>
+          <td>{{shop?.saleStats?.commission | currency}}</td>
+          <td>{{shop?.saleStats?.balance | currency}}</td>
+          <td>{{shop?.saleStats?.taxPrice | currency}}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="8" *ngIf="totalShops > 10">
+            <ngb-pagination [collectionSize]="totalShops" [(page)]="page" [maxSize]="5" (pageChange)="query()"></ngb-pagination>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

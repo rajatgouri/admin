@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-body">
+    <form #frm="ngForm" (submit)="submit(frm)" ngNativeValidate>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Title (*)</label>
+            <input type="text" name="title" class="form-control" placeholder="Enter title" [(ngModel)]="item.title" required />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Alias</label>
+            <input type="text" name="alias" class="form-control" placeholder="Enter alias" [(ngModel)]="item.alias" />
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Content</label>
+            <div [froalaEditor] [(ngModel)]="item.content" name="content">Hello!</div>
+          </div>
+        </div>
+        <div class="col col-md-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>&nbsp;
+            <button class="btn btn-warning" [routerLink]="['/posts']">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

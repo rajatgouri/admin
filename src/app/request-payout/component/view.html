@@ -1,0 +1,363 @@
+<div class="card card-body">
+  <div class="padding-main">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading resume-heading">
+              <div class="row">
+                <div class="col-lg-12">
+                  <h3>General information 123</h3>
+                  <ul class="list-group">
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Request ID
+                        </div>
+                        <div class="col-md-10">
+                          <strong>{{item?.code}}</strong>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Shop
+                        </div>
+                        <div class="col-md-10">
+                          <a [routerLink]="['/shops/update', item.shop._id]" *ngIf="item && item.shop">{{item?.shop?.name}}</a>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Created at
+                        </div>
+                        <div class="col-md-10">
+                          {{item.createdAt | date}}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Request To Date
+                        </div>
+                        <div class="col-md-10">
+                          {{item.requestToTime | date}}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Total balance
+                        </div>
+                        <div class="col-md-10">
+                          <span class="badge badge-success">
+                            {{item?.total | currency}}
+                          </span>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Commission
+                        </div>
+                        <div class="col-md-10">
+                          {{item?.commission | currency}}
+                        </div>
+                      </div>
+                    </li>
+                    <!-- <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2" >
+                          Non-COD balance
+                        </div>
+                        <div class="col-md-10 price-product">
+                          {{item?.nonCodBalance | currency}}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2" >
+                          COD balance
+                        </div>
+                        <div class="col-md-10 price-product">
+                          {{item?.codBalance | currency}}
+                        </div>
+                      </div>
+                    </li> -->
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Shop balance
+                        </div>
+                        <div class="col-md-10 price-product">
+                          {{item?.shopBalance | currency}}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Site balance
+                        </div>
+                        <div class="col-md-10 price-product">
+                          {{item?.siteBalance | currency}}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Request Attempts
+                        </div>
+                        <div class="col-md-10">
+                          {{item?.requestAttempts}}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Status
+                        </div>
+                        <div class="col-md-10">
+                          <select [(ngModel)]="item.status">
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                          </select>
+                          <!-- <div class="form-group" *ngIf="item.status === 'rejected'">
+                            <label>Reason(*)</label>
+                            <textarea class="form-control" [(ngModel)]="info.rejectReason" name="reason" placeholder="Please enter reason"
+                              rows="2" required></textarea>
+                          </div> -->
+                          <div class="form-group" *ngIf="item.status === 'rejected' || item.status === 'approved'">
+                            <label>Message</label>
+                            <textarea class="form-control" [(ngModel)]="info.note" name="note" placeholder="Note" rows="2"
+                              required></textarea>
+                          </div>
+                          <div>
+                            <button class="btn btn-success" *ngIf="item.status === 'approved'" (click)="approve(item)"
+                              type="button">Approve</button>
+                            <button class="btn btn-danger" *ngIf="item.status === 'rejected'" (click)="reject(item)"
+                              type="button">Reject</button>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Message
+                        </div>
+                        <div class="col-md-10 price-product">
+                          {{item?.note}}
+                        </div>
+                      </div>
+                    </li>
+                    <!-- <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Reject Reason
+                        </div>
+                        <div class="col-md-10">
+                          {{item?.rejectReason}}
+                        </div>
+                      </div>
+                    </li> -->
+                  </ul>
+                  <br>
+                  <h3>Payout Account</h3>
+                  <ul class="list-group" *ngIf="item.payoutAccount && item.payoutAccount.type === 'paypal'">
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          Email
+                        </div>
+                        <div class="col-md-9">
+                          {{item?.payoutAccount?.paypalAccount}}
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                  <ul class="list-group" *ngIf="item.payoutAccount && item.payoutAccount.type !== 'paypal'">
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          Holder Name
+                        </div>
+                        <div class="col-md-9">
+                          {{item?.payoutAccount?.accountHolderName}}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          Account Number
+                        </div>
+                        <div class="col-md-3">
+                          {{item?.payoutAccount?.accountNumber}}
+                        </div>
+                        <div class="col-md-3">
+                          Bank Address
+                        </div>
+                        <div class="col-md-3">
+                          {{item?.payoutAccount?.bankAddress}}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          Bank Name
+                        </div>
+                        <div class="col-md-3">
+                          {{item?.payoutAccount?.bankName}}
+                        </div>
+                        <div class="col-md-3">
+                          The International Bank Account Number
+                        </div>
+                        <div class="col-md-3">
+                          {{item?.payoutAccount?.iban}}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          Indian Financial System Code
+                        </div>
+                        <div class="col-md-3">
+                          {{item?.payoutAccount?.ifscCode}}
+                        </div>
+                        <div class="col-md-3">
+                          UK Bank Code
+                        </div>
+                        <div class="col-md-3">
+                          {{item?.payoutAccount?.sortCode}}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          The American Bankers Association Number
+                        </div>
+                        <div class="col-md-3">
+                          {{item?.payoutAccount?.routingNumber}}
+                        </div>
+                        <div class="col-md-3">
+                          Any Other Local Bank Code
+                        </div>
+                        <div class="col-md-3">
+                          {{item?.payoutAccount?.routingCode}}
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                  <br/>
+                  <h3>Payout Transaction Details</h3>
+                  <ul class="list-group" *ngIf="item.payoutTransactionID && item.payoutTransactionID != ''">
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-2">
+                          Payout Status
+                        </div>
+                        <div class="col-md-10">
+                          <span class="badge badge-success">
+                            {{item?.payoutStatus}}
+                          </span>
+                        </div>
+                      </div>
+                    </li>
+                    
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          Paid Payout Amount
+                        </div>
+                        <div class="col-md-9">
+                          {{item?.paidPayoutAmount}}
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          Payout Transaction ID
+                        </div>
+                        <div class="col-md-9">
+                          {{item?.payoutTransactionID}}
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          Payout Account ID
+                        </div>
+                        <div class="col-md-9">
+                          {{item?.payoutAccountID}}
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          Payout Payment ID
+                        </div>
+                        <div class="col-md-9">
+                          {{item?.payoutPaymentID}}
+                        </div>
+                      </div>
+                    </li>
+
+                  </ul>
+
+                  <br>
+                  <button class="btn btn-success" *ngIf="item.status === 'approved' && (!item.payoutTransactionID || item.payoutTransactionID == 0 )" (click)="OpenPayoutModel(content)" type="button">Make Payout</button>
+                  &nbsp;
+                  &nbsp;
+                  <a [routerLink]="['/requestPayout']" class="btn btn-primary">Cancel</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Make Payout</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label for="dateOfBirth">Payout Amount</label>
+          <div class="input-group">
+            <input id="payoutAmount" class="form-control" placeholder="Amount" type="text" name="payoutAmount" [(ngModel)]="payoutAmount">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="doPayout()">Save</button>
+    </div>
+  </ng-template>

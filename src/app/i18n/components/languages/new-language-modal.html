@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h4 class="modal-title">Add new language</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form (submit)="create(frm)" #frm="ngForm">
+    <div class="form-group">
+      <label>Select languages (*)</label>
+      <select class="form-control" [(ngModel)]="newLang.key" name="key" #key="ngModel">
+        <option *ngFor="let item of langs" [value]="item">{{isoLangs[item]?.name}}</option>
+      </select>
+      <div *ngIf="key.errors && (key.dirty || key.touched || submitted)">
+        <p [hidden]="!key.errors.required" class="error">
+          Language key is required
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Name (*)</label>
+      <input type="text" [(ngModel)]="newLang.name" class="form-control" name="name" required #name="ngModel" />
+      <div *ngIf="name.errors && (name.dirty || name.touched || submitted)">
+        <p [hidden]="!name.errors.required" class="error">
+          Name is required
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Default? <input type="checkbox" [(ngModel)]="newLang.isDefault" name="default" /></label>
+    </div>
+    <div class="form-group">
+      <label>Active? <input type="checkbox" [(ngModel)]="newLang.isActive" name="active" /></label>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-prmary" type="submit">Create</button>
+    </div>
+  </form>
+</div>

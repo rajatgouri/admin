@@ -1,0 +1,61 @@
+<div class="card">
+  <div class="card-body" *ngIf="option">
+    <form (submit)="submit(frm)" #frm>
+      <div class="row">
+        <div class="col col-md-6">
+          <div class="form-group">
+            <label>Name (*)</label>
+            <input type="text" name="optionName" class="form-control" placeholder="Enter name" [(ngModel)]="option.name" required />
+          </div>
+        </div>
+        <div class="col col-md-6">
+          <div class="form-group">
+            <label>Description</label>
+            <textarea class="form-control" name="optionDesc" placeholder="Enter description" [(ngModel)]="option.description"></textarea>
+          </div>
+        </div>
+        <div class="col col-md-6">
+          <div class="form-group">
+            <label>Key</label>
+            <input type="text" name="key" class="form-control" placeholder="no space, special chars. key for system" [disabled]="option._id" [(ngModel)]="option.key" />
+          </div>
+        </div>
+        <div class="col col-md-12">
+          <div class="form-group">
+            <label>Options</label>
+            <table class="table">
+              <tr>
+                <td>Key</td>
+                <td>Display text</td>
+                <td>Actions</td>
+              </tr>
+              <tr *ngFor="let option of option.options; let i = index">
+                <td>{{option.key}}</td>
+                <td>{{option.displayText}}</td>
+                <td>
+                  <a (click)="removeOption(i)"><i class="fa fa-trash"></i></a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="text" placeholder="Enter key for option. Eg red, x, xl..." class="form-control" name="newOptionKey" [(ngModel)]="newOption.key" />
+                </td>
+                <td>
+                  <input type="text" placeholder="Enter display text fot the key. Eg Red, X, XL..." class="form-control" name="newOptionText" [(ngModel)]="newOption.displayText" />
+                </td>
+                <td>
+                  <button class="btn btn-primary" (click)="addOption()" type="button">Create</button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="col col-md-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

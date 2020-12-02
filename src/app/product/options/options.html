@@ -1,0 +1,50 @@
+<div class="card">
+  <div class="card-block table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>
+            <a>Name</a>
+          </th>
+          <th>
+            <a>Description</a>
+          </th>
+          <th>
+            <a>Created at</a>
+          </th>
+          <th>
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items, let i = index">
+          <td>
+            <img [src]="item.logo.thumbUrl" *ngIf="item.logo?.thumbUrl" />
+          </td>
+          <td>{{item.name}}</td>
+          <td>{{item.description}}</td>
+          <td>
+            <span>{{item.createdAt | date}}</span>
+          </td>
+          <td>
+            <a [routerLink]="['/products/options/update', item._id ]">
+              <i class="fa fa-pencil"></i>
+            </a>&nbsp;
+            <a (click)="remove(item, i)">
+              <i class="fa fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4">
+            <ngb-pagination [collectionSize]="total" [maxSize]="5" [(page)]="page" (pageChange)="query()"></ngb-pagination>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

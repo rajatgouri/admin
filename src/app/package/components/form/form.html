@@ -1,0 +1,79 @@
+<div class="card">
+  <div class="card-body">
+    <form (submit)="submit(frm)" #frm *ngIf="package">
+      <div class="row">
+        <div class="col col-md-12">
+          <div class="tab-content">
+            <div class="row">
+              <div class="col col-md-6">
+                <div class="form-group">
+                  <label>Name (*)</label>
+                  <input type="text" name="packageName" #packageName="ngModel" class="form-control" placeholder="Enter name"
+                    [(ngModel)]="package.name" required />
+                  <div *ngIf="packageName.errors && (packageName.dirty || packageName.touched || isSubmitted)">
+                    <p [hidden]="!packageName.errors.required" class="required-text">
+                      Please enter package name!
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col col-md-6">
+                <div class="form-group">
+                  <label>Orders (*)</label>
+                  <input type="number" name="ordering" min="0" placeholder="Package ordering" #ordering="ngModel" class="form-control" required [(ngModel)]="package.ordering" />
+                  <div *ngIf="ordering.errors && (ordering.dirty || ordering.touched || isSubmitted)">
+                    <p [hidden]="!ordering.errors.required" class="required-text">
+                      Please enter package ordering!
+                    </p>
+                  </div>
+                </div>
+              </div> -->
+              <div class="col col-md-6">
+                <div class="form-group">
+                  <label>Price (*)</label>
+                  <input type="number" name="price" min="0.1" placeholder="Package price" #price="ngModel" class="form-control"
+                    required [(ngModel)]="package.price" />
+                  <div *ngIf="price.errors && (price.dirty || price.touched || isSubmitted)">
+                    <p [hidden]="!price.errors.required" class="required-text">
+                      Please enter package price!
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-md-6">
+                <div class="form-group">
+                  <label>Duration (*)</label>
+                  <input type="number" name="numDays" min="0" placeholder="Package duration" #numDays="ngModel" class="form-control"
+                    required [(ngModel)]="package.numDays" />
+                  <small class="text-muted">Duration of the package in day(s).</small>
+                  <div *ngIf="numDays.errors && (numDays.dirty || numDays.touched || isSubmitted)">
+                    <p [hidden]="!numDays.errors.required" class="required-text">
+                      Please enter package duration!
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-md-12">
+                <div class="form-group">
+                  <label>Description (*)</label>
+                  <textarea type="text" name="description" rows="4" #description="ngModel" class="form-control"
+                    required placeholder="Enter some text" [(ngModel)]="package.description"></textarea>
+                  <div *ngIf="description.errors && (description.dirty || description.touched || isSubmitted)">
+                    <p [hidden]="!description.errors.required" class="required-text">
+                      Please enter package description!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col col-md-12">
+          <div class="form-group">
+            <hr />
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>

@@ -1,0 +1,460 @@
+<div class="card">
+  <div class="card-body">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%" *ngIf="!product"></div>
+    <form (submit)="submit(frm)" #frm="ngForm" *ngIf="product">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="nav flex-column nav-pills nav-top-cus" role="tablist" aria-orientation="vertical">
+            <a class="nav-link" data-toggle="tab" role="tab" aria-controls="home" aria-selected="true" [ngClass]="{active: tab == 'info'}" (click)="changeTab('info')">Information</a>
+
+            <a class="nav-link" data-toggle="tab" role="tab" aria-controls="profile" aria-selected="false" [ngClass]="{active: tab == 'spec'}" (click)="changeTab('spec')">Specifications</a>
+
+            <a class="nav-link" data-toggle="tab" role="tab" aria-controls="contact" aria-selected="false" [ngClass]="{active: tab == 'images'}" (click)="changeTab('images')">Images</a>
+
+            <a class="nav-link" data-toggle="tab" role="tab" aria-controls="contact" aria-selected="false" [ngClass]="{active: tab == 'variants'}" (click)="changeTab('variants')">Variants</a>
+
+            <a class="nav-link" data-toggle="tab" role="tab" aria-controls="contact" aria-selected="false" [ngClass]="{active: tab == 'reviews'}" (click)="changeTab('reviews')" [hidden]="!product._id">Reviews</a>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="tab-content">
+            <div class="tab-pane fade show active" role="tabpanel" [ngClass]="{'show active': tab === 'info'}">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Name (*)</label>
+                    <input type="text" name="productName" class="form-control" placeholder="Enter name" [(ngModel)]="product.name" required (change)=" changeAlias()" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Alias</label>
+                    <input type="text" name="alias" class="form-control" placeholder="no space, special chars, alias name for seo" [(ngModel)]="product.alias" />
+                    <small class="text-muted">If the alias is exist, the system automatically adds any character at the
+                      end of alias.</small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Type</label>
+                    <select type="text" name="type" class="form-control" placeholder="Physical or Digital" [(ngModel)]="product.type">
+                      <option value="physical">Physical</option>
+                      <option value="digital">Digital</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="col-md-6" *ngIf="product.type === 'digital'">
+                  <div class="form-group" >
+                    <label style="width:100%">Digital FilePath (*)</label>
+                    <file-upload [options]="fileOptions"></file-upload>
+                    <img src="/assets/images/doc_image.png" width="45px" *ngIf="product.type === 'digital' && product.digitalFileId">
+                    <img src="/assets/images/nofile-available.png" width="45px" *ngIf="product.type === 'digital' && !product.digitalFileId">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Transaction Type</label>
+                    <select class="form-control" [(ngModel)]="product.transactiontypeId" name="transactiontypeId" (change) = "transactionTypeChange($event)" >
+                      <option value="">-- No Transaction Type --</option>
+                      <option *ngFor="let item of transactionType" [ngValue]="item._id">{{item.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Category</label>
+                    <select class="form-control" [(ngModel)]="product.categoryId" name="categoryId">
+                      <option value="">-- No category --</option>
+                      <option *ngFor="let item of tree" [ngValue]="item._id">{{item.name}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Product Type</label>
+                    <select class="form-control" [(ngModel)]="product.producttypeId" name="producttypeId" >
+                      <option value="">-- No Product Type --</option>
+                      <option *ngFor="let item of productType" [ngValue]="item._id">{{item.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="col-md-6" *ngIf="transactionTypeText !== 'Rent' && transactionTypeText !== 'Share' ">
+                  <div class="form-group">
+                    <label>Stock Quantity</label>
+                    <input type="number" name="stockQuantity" min="1" class="form-control" [(ngModel)]="product.stockQuantity" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Seller</label>
+                    <input type="text" name="seller" class="form-control" (selectItem)="selectedItem($event)"  [class.is-invalid]="searchFailed" *ngIf="!isUpdate" [(ngModel)]="seller" [ngbTypeahead]="search" placeholder="Search seller" [resultTemplate]="rt" [inputFormatter]="formatterClinic" />
+                    <input type="text" name="seller" class="form-control" *ngIf="isUpdate" readonly [(ngModel)]="product.shop.name" />
+                    <span *ngIf="searching">searching...</span>
+                    <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
+                    <ng-template #rt let-r="result" let-t="term" >
+                      <ngb-highlight [result]="r.name" [term]="t" ></ngb-highlight>&nbsp;
+                      <small>({{r?.owner?.name ? r.owner.name : 'N/A'}})</small>
+                    </ng-template>
+                  </div>
+                </div>
+
+                <div class="col-md-6" *ngIf="showZipcode">
+                  <div class="form-group">
+                    <label>Zip Code</label>
+                    <input type="text" name="productZip" class="form-control"  [(ngModel)]="product.zipcode"  placeholder="Zipcode" required/>
+                    
+                  </div>
+                </div>
+                
+                <div class="col-md-6" *ngIf="transactionTypeText == 'Rent' || transactionTypeText == 'Share'">
+                  <div class="form-group">
+                    <label>Available From</label>
+                    <input class="form-control" type="text" placeholder="From Date"
+                    name="dpFromDate" [(ngModel)]="fromDate" ngbDatepicker   #df="ngbDatepicker" (click)="df.toggle()" (dateSelect)="validateAvailableDate($event)">
+                  </div>
+                </div>
+
+                <div class="col-md-6" *ngIf="transactionTypeText == 'Rent' || transactionTypeText == 'Share'">
+                  <div class="form-group">
+                    <label>Available To</label>
+                    <input class="form-control" placeholder="To Date" name="dpToDate" [(ngModel)]="toDate"  ngbDatepicker #dt="ngbDatepicker" (click)="dt.toggle()" (dateSelect)="validateAvailableDate($event)">
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>{{transactionTypeText === 'Rent'|| transactionTypeText === 'Share'  ? 'Price Per Day' : 'Price' }}</label>
+                    <input type="number" name="price" min="0.1" class="form-control" [(ngModel)]="product.price" />
+                  </div>
+                </div>
+
+                <div class="col-md-6" *ngIf="transactionTypeText == 'Rent' || transactionTypeText == 'Share'">
+                  <div class="form-group">
+                    <label>Price Per Week</label>
+                    <input type="number" name="pricePerWeek" min="0.1" class="form-control" [(ngModel)]="product.pricePerWeek" />
+                  </div>
+                </div>
+
+                <div class="col-md-6" *ngIf="transactionTypeText == 'Rent' || transactionTypeText == 'Share'">
+                  <div class="form-group">
+                    <label>Price Per Month</label>
+                    <input type="number" name="pricePerMonth" min="0.1" class="form-control" [(ngModel)]="product.pricePerMonth" />
+                  </div>
+                </div>
+                <div class="col-md-6" *ngIf="transactionTypeText !== 'Rent' && transactionTypeText !== 'Share' ">
+                  <div class="form-group">
+                    <label>Sale Price</label>
+                    <input type="number" name="salePrice" min="0.1" class="form-control" [(ngModel)]="product.salePrice" />
+                  </div>
+                </div>
+                <div class="col-md-6" *ngIf="transactionTypeText == 'Rent' || transactionTypeText == 'Share'">
+                  <div class="form-group">
+                    <label>Deposite Amount</label>
+                    <input type="number" name="depositAmont" min="0.1" class="form-control" [(ngModel)]="product.depositAmont" />
+                  </div>
+                </div>
+                <div class="col-md-6" *ngIf="transactionTypeText == 'Rent' || transactionTypeText == 'Share'">
+                  <div class="form-group">
+                    <label>Area Distance</label>
+                    <input type="number" name="distance" min="0.1" class="form-control" [(ngModel)]="product.distance" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Tax Name</label>
+                    <input type="text" name="taxClass" class="form-control" placeholder="VAT,Sales Tax,..." [(ngModel)]="product.taxClass" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Tax Value (%)</label>
+                    <input type="number" name="taxValue" class="form-control" placeholder="10" [(ngModel)]="product.taxPercentage" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Restrict COD areas</label>
+                    <div>
+                      <span *ngFor="let item of product.restrictCODAreas; let i = index" class="label label-warning position-relative">
+                        {{item}}<a (click)="removeCodeArea(i)" class="remove-item">x</a>
+                      </span>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-9"><input type="text" name="restrictCODAreas" [(ngModel)]="restrictCODAreas" class="form-control" /></div>
+                      <div class="col-sm-3">
+                        <div class="btn btn-success" (click)="addRestrictCODAreas()">Add</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>SKU</label>
+                    <input type="text" name="sku" placeholder="Stock keeping unit" class="form-control" [(ngModel)]="product.sku" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>UPC</label>
+                    <input type="text" name="upc" placeholder="Univeral product code" class="form-control" [(ngModel)]="product.upc" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>MPN</label>
+                    <input type="text" name="mpn" placeholder="Manufacturer's part number" class="form-control" [(ngModel)]="product.mpn" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>EAN</label>
+                    <input type="text" name="ean" placeholder="European article number" class="form-control" [(ngModel)]="product.ean" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>JAN</label>
+                    <input type="text" name="jan" placeholder="Japanese article number" class="form-control" [(ngModel)]="product.jan" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>ISBN</label>
+                    <input type="text" name="isbn" placeholder="International standard book number" class="form-control" [(ngModel)]="product.isbn" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Short description</label>
+                    <textarea class="form-control" name="productsdesc" placeholder="Enter some text" [(ngModel)]="product.shortDescription"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Description</label>
+                    <div [froalaEditor] [(froalaModel)]="product.description"></div>
+                  </div>
+                </div>
+                
+                <div class="col-md-6" *ngIf="product.metaSeo">
+                  <div class="form-group">
+                    <label>Meta keywords</label>
+                    <input type="text" class="form-control" name="metakw" [(ngModel)]="product.metaSeo.keywords" placeholder="Enter keywords for meta SEO" />
+                  </div>
+                </div>
+                <div class="col-md-6" *ngIf="product.metaSeo">
+                  <div class="form-group">
+                    <label>Meta description</label>
+                    <input class="form-control" name="metadesc" [(ngModel)]="product.metaSeo.description" placeholder="Enter description for meta SEO">
+                  </div>
+                </div>
+                <!-- <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Ordering</label>
+                    <input type="number" name="ordering" [(ngModel)]="product.ordering" class="form-control" />
+                  </div>
+                </div> -->
+                <div class="col-md-6"></div>
+                <div class="col-md-12">
+                  <hr>
+                  <h4>Enter zip code or select the free ship areas.</h4>
+                  <span *ngFor="let item of freeShipAreas; let i = index" class="label label-warning position-relative">
+                    {{item.areaType}}: {{item.name ? item.name : item.value}}<a (click)="removeArea(i)" class="remove-item">x</a>
+                  </span>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label>Zip Code</label>
+                    <input type="text" name="Zipcode" [(ngModel)]="zipCode" class="form-control" />
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label>Free Ship Country</label>
+                    <select [(ngModel)]="freeCountry" class="form-control" name="freeCountry" (change)="loadStates(freeCountry.isoCode)">
+                      <option *ngFor="let item of countries" [ngValue]="item">{{item.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label>Free Ship State</label>
+                    <select [(ngModel)]="freeState" class="form-control" name="freeCountry" (change)="loadCities(freeState._id)">
+                      <option *ngFor="let item of states" [ngValue]="item">{{item.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label>Free Ship City</label>
+                    <select [(ngModel)]="freeCity" class="form-control" name="freeCity">
+                      <option *ngFor="let item of cities" [ngValue]="item">{{item.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="btn btn-success" (click)="addFreeShipAreas()">Add</div>
+                </div>
+                <div class="col-md-12">
+                  <hr>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="dailyDeal" [(ngModel)]="product.dailyDeal" /> Daily deal</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-group" *ngIf="product.dailyDeal">
+                    <div class="checkbox">
+                      <label>Deal To (UTC): <span class="label label-info daily-font-size" *ngIf="product.dealTo">{{product?.dealTo
+                          | date:'short'}}</span></label>
+                      <div class="row">
+                        <ngb-datepicker [(ngModel)]="dealDate" name="dealTo"></ngb-datepicker>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <hr>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="freeShipe" [(ngModel)]="product.freeShip" /> Free Ship</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="featured" [(ngModel)]="product.featured" /> Featured</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="hot" [(ngModel)]="product.hot" /> Hot Product</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="bestSell" [(ngModel)]="product.bestSell" /> Best Selling</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="active" [(ngModel)]="product.isActive" /> Active</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="notification" [(ngModel)]="product.notification" /> Notifications</label>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="tab-pane fade show active" role="tabpanel" [ngClass]="{'show active': tab === 'spec'}">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Specifications</label>
+                    <table class="table">
+                      <tbody class="sortable" [sortablejs]="product.specifications">
+                        <tr *ngFor="let c of product.specifications; let i = index">
+                          <td>
+                            <span>
+                              <i class="fa fa-bars"></i> <strong>{{c.key}}</strong>
+                            </span>
+                          </td>
+                          <td>
+                            <input type="text" name="spec{{i}}" [(ngModel)]="c.value" class="form-control" />
+                          </td>
+                          <td>
+                            <a (click)="removeSpec(i)"><i class="fa fa-trash"></i></a>
+                          </td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td>
+                            <input type="text" class="form-control" placeholder="Enter specification type" name="newSpec" [(ngModel)]="newSpecification.key" />
+                          </td>
+                          <td>
+                            <div class="input-group mb-3">
+                              <input type="text" class="form-control" placeholder="Enter specification value" name="newChemicalValue" [(ngModel)]="newSpecification.value" />
+                              <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" (click)="addSpecification()">Add</button>
+                              </div>
+                            </div>
+                          </td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade show active" role="tabpanel" [ngClass]="{'show active': tab === 'images'}">
+              <h3>Click to set main image.</h3>
+              <div class="row">
+                <div class="col-md-3 text-center" *ngFor="let media of images; let i = index">
+                  <div [ngClass]="{selected: media._id === mainImage}">
+                    <media-preview [media]="media"></media-preview>
+                  </div>
+                  <div class="btn-group" role="group">
+                    <button class="btn btn-secondary" type="button" [ngClass]="{'btn-success' : media._id === mainImage}" (click)="setMain(media)">
+                      <i class="fa fa-check"></i>
+                    </button>
+                    <button class="btn btn-secondary" type="button" (click)="removeImage(media, i)">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <hr />
+              <media-select (onSelect)="selectImage($event)" [options]="imagesOptions"></media-select>
+            </div>
+
+            <div class="tab-pane fade show active" role="tabpanel" [ngClass]="{'show active': tab === 'variants'}">
+              <product-variants [product]="product" *ngIf="product?._id"></product-variants>
+              <div class="alert" *ngIf="!product?._id">
+                Please create product then add variants
+              </div>
+            </div>
+            <div class="tab-pane fade " role="tabpanel" [ngClass]="{'show active': tab === 'reviews'}">
+              <reviews-listing [product]="product" *ngIf="product?._id"></reviews-listing>
+              <div class="alert" *ngIf="!product?._id">
+                Please create product
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          <hr />
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

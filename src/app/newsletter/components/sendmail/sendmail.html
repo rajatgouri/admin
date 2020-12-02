@@ -1,0 +1,51 @@
+<div class="card">
+  <div class="card-body">
+    <form #frm="ngForm" (submit)="submit(frm)">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Subject (*)</label>
+            <input type="text" name="title" class="form-control" placeholder="Enter subject" [(ngModel)]="data.subject" required #subject="ngModel" />
+            <div *ngIf="submitted && !data.subject">
+              <p [hidden]="!subject.errors.required" class="error">
+                Subject is required
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>User type</label>
+            <select class="form-control" name="user type" [(ngModel)]="data.userType">
+              <optgroup label="Users">
+                <option value="">All users</option>
+                <option value="seller">Seller</option>
+                <option value="user">Registered user</option>
+              </optgroup>
+              <optgroup label="Other">
+                <option value="">Newsletter contacts</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Content (*)</label>
+            <div [froalaEditor] [(ngModel)]="data.content" name="content"></div>
+            <div *ngIf="submitted && !data.content">
+              <p class="error">
+                Content is required
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col col-md-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Send</button>&nbsp;
+            <button class="btn btn-warning" [routerLink]="['/newsletter/contacts']">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

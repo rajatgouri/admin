@@ -1,0 +1,172 @@
+<div class="card">
+  <div class="card-block table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items; let i = index">
+          <td>{{item.name}}</td>
+          <td>
+            <div class="input-group" *ngIf="item.type === 'number'">
+              <input type="number" class="form-control" [(ngModel)]="item.value" name="item{{item._id}}" min="0.01" step="0.01" />
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" (click)="save(item)">Save</button>
+              </span>
+            </div>
+            <div class="input-group" *ngIf="item.type === 'text'">
+              <input type="text" class="form-control" [(ngModel)]="item.value" name="item{{item._id}}" />
+              <span class="input-group-btn" *ngIf="item.key === 'siteLogo' || item.key === 'siteFavicon'">
+                <img width="40px" [src]="item?.value">
+                <media-select [options]="{multiple: true}" (onSelect)="selectMedial($event, i)"></media-select>
+              </span>
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" (click)="save(item)">Save</button>
+              </span>
+            </div>
+            <div *ngIf="item.type === 'mixed'">
+              <div *ngIf="item.key === 'paypal'">
+                <div class="form-group">
+                  <label>Username</label>
+                  <input type="text" class="form-control" [(ngModel)]="item.value.username" />
+                </div>
+                <div class="form-group">
+                  <label>Password</label>
+                  <input type="password" class="form-control" [(ngModel)]="item.value.password" />
+                </div>
+                <div class="form-group">
+                  <label>Signature</label>
+                  <input type="password" class="form-control" [(ngModel)]="item.value.signature" />
+                </div>
+                <div class="form-group">
+                  <label>Sandbox <input type="checkbox" [(ngModel)]="item.value.sandbox" /></label>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" (click)="save(item)">Save</button>
+                </div>
+              </div>
+              <div *ngIf="item.key === 'ccbill'">
+                <div class="form-group">
+                  <label>Account Number</label>
+                  <input type="text" class="form-control" [(ngModel)]="item.value.accountNumber" />
+                </div>
+                <div class="form-group">
+                  <label>Sub account Number</label>
+                  <input type="text" class="form-control" [(ngModel)]="item.value.subAccountNumber" />
+                </div>
+                <div class="form-group">
+                  <label>Salt</label>
+                  <input type="text" class="form-control" [(ngModel)]="item.value.salt" />
+                </div>
+                <div class="form-group">
+                  <label>Flexform subscription id</label>
+                  <input type="text" class="form-control" [(ngModel)]="item.value.flexformSubscriptionId" />
+                </div>
+                <div class="form-group">
+                  <label>Flexform single payment id</label>
+                  <input type="text" class="form-control" [(ngModel)]="item.value.flexformSingleId" />
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" (click)="save(item)">Save</button>
+                </div>
+              </div>
+              <div *ngIf="item.key === 'homeSEO'">
+                <div class="form-group">
+                  <label>Keywords</label>
+                  <input type="text" class="form-control" [(ngModel)]="item.value.keywords" />
+                </div>
+                <div class="form-group">
+                  <label>Description</label>
+                  <textarea class="form-control" [(ngModel)]="item.value.description"></textarea>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" (click)="save(item)">Save</button>
+                </div>
+              </div>
+              <div *ngIf="item.key === 'securityIcon1' || item.key === 'securityIcon2' || item.key === 'securityIcon3'">
+                <div class="form-group">
+                  <label>Icon <media-select [options]="{multiple: true}" (onSelect)="selectIcon($event, i)"></media-select>
+                    <img [src]="item?.value?.iconUrl" width="40px"></label>
+                  <input type="text" class="form-control" [(ngModel)]="item.value.iconUrl" />
+                </div>
+                <div class="form-group">
+                  <label>Title</label>
+                  <input class="form-control" [(ngModel)]="item.value.title">
+                </div>
+                <div class="form-group">
+                  <label>Display text </label>
+                  <textarea class="form-control" [(ngModel)]="item.value.displayText" placeholder="Enter some text" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" (click)="save(item)">Save</button>
+                </div>
+              </div>
+              <div *ngIf="item.key === 'paymentGatewayConfig'">
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <label><input type="checkbox" [(ngModel)]="item.value.cod.enable" name="trustedTwitter"> Cash on
+                        delivery (COD)</label>
+                    </div>
+                    <div class="col-md-4">
+                      <label><input type="checkbox" [(ngModel)]="item.value.paypal.enable" name="trustedTwitter">
+                        Paypal</label>
+                    </div>
+                    <div class="col-md-4">
+                      <label><input type="checkbox" [(ngModel)]="item.value.stripe.enable" name="trustedTwitter">
+                        Credit
+                        Card</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" (click)="save(item)">Save</button>
+                </div>
+              </div>
+              <div *ngIf="item.key === 'socialLinks'">
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label>Facebook</label>
+                      <input [(ngModel)]="item.value.facebook" name="facebook" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label>Google</label>
+                      <input [(ngModel)]="item.value.google" name="google" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label>Twitter </label>
+                      <input [(ngModel)]="item.value.twitter" name="twitter" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label>LinkedIn </label>
+                      <input [(ngModel)]="item.value.linkedin" name="linkedin" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label>Dribbble </label>
+                      <input [(ngModel)]="item.value.dribbble" name="dribbble" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" (click)="save(item)">Save</button>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

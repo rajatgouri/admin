@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-body">
+    <form #frm="ngForm" (submit)="submit(frm)" ngNativeValidate>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Content</label>
+            <textarea [(ngModel)]="item.content" name="content" class="form-control" rows="3" readonly></textarea>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Note</label>
+            <input type="text" name="note" class="form-control" placeholder="Enter note" [(ngModel)]="item.note" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Status</label>
+            <select name="status" class="form-control" [(ngModel)]="item.status">
+              <option value="pending">Pending</option>
+              <option value="resolved">Resolved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+        </div>
+        <div class="col col-md-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>&nbsp;
+            <button class="btn btn-warning" [routerLink]="['/complaints']">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
